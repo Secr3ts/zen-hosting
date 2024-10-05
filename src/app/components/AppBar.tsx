@@ -16,7 +16,7 @@ function classNames(...classes: string[]) {
 export default function AppBar() {
     return (
         <>
-            <Disclosure as="nav" className="bg-gray-400">
+            <Disclosure as="nav" className="bg-gray-950">
                 <div className="mx-auto max-w-full px-2 sm:px-6 lg:px-8">
                     <div className="relative flex h-16 items-center justify-between">
                         <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -29,7 +29,7 @@ export default function AppBar() {
                             </DisclosureButton>
                         </div>
                         <div className="flex flex-1 items-center justify-start sm:items-stretch sm:justify-start">
-                            <div>
+                            <div className="">
                                 <Image
                                     src="/logo.png"
                                     width={400}
@@ -47,8 +47,8 @@ export default function AppBar() {
                                                 href={item.href}
                                                 aria-current={item.current ? 'page' : undefined}
                                                 className={classNames(
-                                                    item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                                                    'rounded-md px-3 py-2 text-sm font-medium',)}
+                                                    item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-50 hover:text-black',
+                                                    'rounded-md px-3 py-2 text-sm font-medium')}
                                             >{item.name}</a>
                                         ))
                                     }
@@ -56,9 +56,9 @@ export default function AppBar() {
                             </div>
                         </div>
                         <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                            <button
+                            <button // hidden don't forget
                                 type="button"
-                                className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                                className="hidden relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                             >
                                 <span className="absolute -inset-1.5" />
                                 <span className="sr-only">test</span>
@@ -83,17 +83,17 @@ export default function AppBar() {
                                 >
                                     <MenuItem>
                                         <a href="#" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
-                                            Your Profile
+                                            Votre Profil
                                         </a>
                                     </MenuItem>
                                     <MenuItem>
                                         <a href="#" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
-                                            Settings
+                                            Paramètres
                                         </a>
                                     </MenuItem>
                                     <MenuItem>
                                         <a href="#" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
-                                            Sign out
+                                            Se Déconnecter
                                         </a>
                                     </MenuItem>
                                 </MenuItems>
@@ -111,7 +111,7 @@ export default function AppBar() {
                                 href={item.href}
                                 aria-current={item.current ? 'page' : undefined}
                                 className={classNames(
-                                    item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                                    item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-white hover:text-black',
                                     'block rounded-md px-3 py-2 text-base font-medium',
                                 )}
                             >

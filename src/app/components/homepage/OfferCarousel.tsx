@@ -7,7 +7,7 @@ import { useState } from "react";
 
 const offers = [{
     description: "desc1",
-    prix: 90,
+    prix: 120,
     features: ["zen", "facile", "simple", "formule"]
 },
 {

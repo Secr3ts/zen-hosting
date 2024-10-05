@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
-import localFont from "next/font/local";
+// import localFont from "next/font/local";
 import "./globals.css";
 
+/*
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -13,6 +14,7 @@ const geistMono = localFont({
   variable: "--font-geist-mono",
   weight: "100 900",
 });
+*/
 
 const roboto = Roboto({
   subsets: ["latin"],

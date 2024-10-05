@@ -3,10 +3,9 @@ import { Bars3Icon, XMarkIcon, BellIcon } from "@heroicons/react/16/solid";
 import Image from 'next/image'
 
 const navigation = [
-    { name: 'Nos Offres', href: '#', current: false },
-    { name: 'Pourquoi nous ?', href: '#', current: false },
-    { name: 'Notre infrastructure', href: '#', current: false },
-    // {name: 'Nos Offres', href: '#', current: false},
+    { name: 'Pourquoi nous ?', href: '#news', current: false },
+    { name: 'Nos Offres', href: '#offers', current: false },
+    { name: 'Notre infrastructure', href: '#infra', current: false },
 ]
 
 function classNames(...classes: string[]) {
@@ -29,7 +28,7 @@ export default function AppBar() {
                             </DisclosureButton>
                         </div>
                         <div className="flex flex-1 items-center justify-start sm:items-stretch sm:justify-start">
-                            <div className="">
+                            <div className="group flex flex-row">
                                 <Image
                                     src="/logo.png"
                                     width={400}
@@ -37,6 +36,7 @@ export default function AppBar() {
                                     alt="zen-hosting"
                                     className="h-8 w-auto"
                                 />
+                                {/*<p className="hidden group-hover:block text-white">Zen Hosting</p>*/}
                             </div>
                             <div className="hidden sm:ml-6 sm:block">
                                 <div className="flex space-x-4">

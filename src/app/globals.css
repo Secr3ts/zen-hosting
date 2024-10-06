@@ -16,6 +16,8 @@
 
 html {
   scroll-behavior: smooth;
+  padding-right: 0px !important;
+  overflow: visible !important;
   overflow-y: auto;
 }
 

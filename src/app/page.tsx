@@ -14,7 +14,7 @@ export default function Home() {
         <NewsHeader />
         <AppBar />
       </div>
-      <main /*className="flex flex-col gap-8 col-start-2 items-center sm:items-start p-2"*/>
+      <main  className="pt-16"/*className="flex flex-col gap-8 col-start-2 items-center sm:items-start p-2"*/>
         <NewsCard />
         <OfferCarousel />
         <InfraCard />

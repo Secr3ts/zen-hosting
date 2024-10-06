@@ -10,7 +10,7 @@ export default function InfraCard() {
                         {[...Array(3)].map((_, index) => {
                                 return (
                                     // CLick to reveal ?
-                                    <div className="flex md:flex-col text-center flex-row gap-8">
+                                    <div key={index} className="flex md:flex-col text-center flex-row gap-8">
                                         <Image
                                             src="https://placehold.co/200x200.png"
                                             width={200}

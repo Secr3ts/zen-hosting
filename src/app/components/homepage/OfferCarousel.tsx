@@ -10,19 +10,19 @@ import { useState } from "react";
 const offers = [{
     description: "Zen",
     prix: 110,
-    features: ["Hébérgement", "Sécurité", "Démarches prises en charge", <a className="group" href="#footer">Pour en savoir plus, <span className="group-hover:underline">contactez nous</span> !</a>],
+    features: ["Hébérgement", "Sécurité", "Démarches prises en charge", <a key={0} className="group" href="#footer">Pour en savoir plus, <span className="group-hover:underline">contactez nous</span> !</a>],
     color: "blue"
 },
 {
     description: "Full",
     prix: 150,
-    features: ["Hébérgement", "Sécurité", "Serveur Mail", "Démarches prises en charge", <a className="group" href="#footer">Pour en savoir plus, <span className="group-hover:underline">contactez nous</span> !</a>],
+    features: ["Hébérgement", "Sécurité", "Serveur Mail", "Démarches prises en charge", <a key={1} className="group" href="#footer">Pour en savoir plus, <span className="group-hover:underline">contactez nous</span> !</a>],
     color: "red"
 },
 {
     description: "Lite",
     prix: 100,
-    features: ["Hébérgement", "Sécurité", <a className="group" href="#footer">Pour en savoir plus, <span className="group-hover:underline">contactez nous</span> !</a>],
+    features: ["Hébérgement", "Sécurité", <a key={2} className="group" href="#footer">Pour en savoir plus, <span className="group-hover:underline">contactez nous</span> !</a>],
     color: "light-blue"
 }
 ];

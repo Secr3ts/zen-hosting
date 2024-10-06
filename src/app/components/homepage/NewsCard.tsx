@@ -4,8 +4,8 @@ export default function NewsCard() {
     return (
         <section id="news">
             <div className="flex items-center justify-center min-h-screen bg-gray-600">
-                <div className="flex md:flex-row sm:flex-col gap-8 p-8">
-                    <div className="flex flex-col gap-8 items-center justify-center sm:items-start">
+                <div className="flex flex-col md:flex-row gap-8 p-8">
+                    <div className="flex flex-col gap-8 items-center justify-center">
                         <Image
                             alt="Placeholder"
                             src="https://placehold.co/400x400.png"

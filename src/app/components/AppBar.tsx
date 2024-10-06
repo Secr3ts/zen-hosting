@@ -28,7 +28,7 @@ export default function AppBar() {
                             </DisclosureButton>
                         </div>
                         <div className="flex flex-1 items-center justify-start sm:items-stretch sm:justify-start">
-                            <div className="group flex flex-row">
+                            <div className="group flex-row hidden md:flex">
                                 <Image
                                     src="/logo.png"
                                     width={400}

@@ -10,19 +10,19 @@ import { useState } from "react";
 const offers = [{
     description: "Zen",
     prix: 110,
-    features: ["zen", "facile", "simple", "formule"],
+    features: ["Hébérgement", "Sécurité", "Démarches prises en charge", <a className="group" href="#footer">Pour en savoir plus, <span className="group-hover:underline">contactez nous</span> !</a>],
     color: "blue"
 },
 {
     description: "Full",
     prix: 150,
-    features: ["zen", "simple", "simple", "formule"],
+    features: ["Hébérgement", "Sécurité", "Serveur Mail", "Démarches prises en charge", <a className="group" href="#footer">Pour en savoir plus, <span className="group-hover:underline">contactez nous</span> !</a>],
     color: "red"
 },
 {
     description: "Lite",
     prix: 100,
-    features: ["pas cher", "simple", "simple", "formule"],
+    features: ["Hébérgement", "Sécurité", <a className="group" href="#footer">Pour en savoir plus, <span className="group-hover:underline">contactez nous</span> !</a>],
     color: "light-blue"
 }
 ];
@@ -32,11 +32,12 @@ export default function OfferCarousel() {
     const [index, setIndex] = useState(0);
 
     return (
+        // Add fake carousel mobile
         <section id="offers">
             <div className="bg-gray-300 p-8 min-h-screen items-center justify-center flex flex-col gap-8">
                 <p className="text-4xl text-black text-center">Nos Formules</p>
-                <div className="flex flex-row gap-16 justify-center">
-                    <Carousel className="rounded-md overflow-hidden" showThumbs={false} onChange={(index) => setIndex(index)}>
+                <div className="flex flex-col md:flex-row gap-16 justify-center">
+                    <Carousel className="rounded-md hidden md:flex overflow-hidden" showThumbs={false} onChange={(index) => setIndex(index)}>
                         {[...Array(3)].map((_, index) => (
                             <div key={index}>
                                 <Image
@@ -72,8 +73,8 @@ export default function OfferCarousel() {
                         <p className="text-2xl font-bold self-start text-black">Fonctionnalités</p>
                         <ul className="list-inside list-disc text-black">
                             {
-                                offers[index].features.map((value, index) => {
-                                    return <li key={index} className="text-lg">{value}</li>
+                                offers[index].features.map((value, ind) => {
+                                    return <li key={ind} className={"text-lg " + (offers[index].features.length - 1 === ind ? "list-none mt-4" : "")}>{value}</li>
                                 })
                             }
                         </ul>

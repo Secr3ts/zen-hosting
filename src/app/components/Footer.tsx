@@ -36,7 +36,7 @@ export default function Footer() {
 
     return (
         <section id="footer" className="rounded-t-md w-screen">
-            <div className="flex flex-row bg-black justify-around p-8">
+            <div className="flex flex-col md:flex-row gap-8 md:gap-0 bg-black justify-around p-8">
                 {/* Logo */}
                 <div className="flex flex-1 flex-col gap-2">
                     <div className="flex flex-row">

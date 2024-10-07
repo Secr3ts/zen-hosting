@@ -1,8 +1,12 @@
 import Image from 'next/image';
 
-export default function NewsCard() {
+interface NewsCardProps {
+    className?: string;
+}
+
+const NewsCard: React.FC<NewsCardProps> = ({className}) => {
     return (
-        <section id="news">
+        <section id="news"  className={className}>
             <div className="flex items-center justify-center min-h-screen bg-gray-600">
                 <div className="flex flex-col md:flex-row gap-8 p-8">
                     <div className="flex flex-col gap-8 items-center justify-center">
@@ -27,3 +31,5 @@ export default function NewsCard() {
         </section>
     )
 }
+
+export default NewsCard;

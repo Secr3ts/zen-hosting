@@ -1,9 +1,13 @@
 import Image from "next/image";
 
-export default function InfraCard() {
+interface InfraCardProps {
+    className?: string;
+}
+
+const InfraCard: React.FC<InfraCardProps> = ({className}) => {
     return (
         <>
-            <section id="infra">
+            <section id="infra" className={className}>
                 <div className="bg-gray-400 p-8 min-h-screen items-center justify-center flex flex-col gap-8">
                     <p className="text-4xl text-center">Notre <span className="font-semibold">Infrastructure</span></p>
                     <div className="flex flex-col md:flex-row gap-8">
@@ -18,7 +22,7 @@ export default function InfraCard() {
                                             alt="infr"
                                             className="rounded-md"
                                         />
-                                        <p className="text-xl">Infra 1 </p>
+                                        <p className="text-xl">Infra {index + 1} </p>
                                     </div>
                                 )
                             })}
@@ -28,3 +32,5 @@ export default function InfraCard() {
         </>
     )
 }
+
+export default InfraCard

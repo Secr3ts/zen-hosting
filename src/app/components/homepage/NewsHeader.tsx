@@ -1,10 +1,13 @@
+import Marquee from "react-fast-marquee";
 
 export default function NewsHeader() {
     return(
         <>
-            <div className="mx-auto max-w-full sm:px-6 lg:px-8 bg-black"
+            <div className="mx-auto max-w-full min-w-full bg-black"
             >
-                <p className="text-center text-white">zenhosting - ouverture prochaine </p>
+                <Marquee>
+                    <p className="text-center text-white m-50">zen hosting - ouverture très prochaine</p>
+                </Marquee>
             </div>
         </>
     )

@@ -27,13 +27,17 @@ const offers = [{
 }
 ];
 
-export default function OfferCarousel() {
+interface OfferCarouselProps {
+    className?: string;
+}
+
+const OfferCarousel: React.FC<OfferCarouselProps> = ({className}) => {
     // Index selected
     const [index, setIndex] = useState(0);
 
     return (
         // Add fake carousel mobile
-        <section id="offers">
+        <section id="offers" className={className}>
             <div className="bg-gray-300 p-8 min-h-screen items-center justify-center flex flex-col gap-8">
                 <p className="text-4xl text-black text-center">Nos Formules</p>
                 <div className="flex flex-col md:flex-row gap-16 justify-center">
@@ -64,7 +68,7 @@ export default function OfferCarousel() {
                             </p>
                         </div>
                         <div className="mt-4">
-                            <Button className="rounded bg-black py-2 px-4 text-sm text-white data-[hover]:bg-gray-800 data-[active]:bg-gray-900">
+                            <Button className="hover:scale-110 ease-in duration-75 rounded bg-black py-2 px-4 text-sm text-white data-[hover]:bg-gray-800 data-[active]:bg-gray-900">
                                 Acheter
                             </Button>
                         </div>
@@ -84,3 +88,5 @@ export default function OfferCarousel() {
         </section>
     )
 }
+
+export default OfferCarousel;

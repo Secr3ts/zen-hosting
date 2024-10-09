@@ -1,6 +1,12 @@
+"use client"
+
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon, BellIcon, UserIcon } from "@heroicons/react/16/solid";
+import { auth } from "@/lib/firebase-client-config";
 import Image from 'next/image'
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import clsx from 'clsx';
 
 const navigation = [
     { name: 'Pourquoi nous ?', href: '#news', current: false },
@@ -13,6 +19,30 @@ function classNames(...classes: string[]) {
 }
 
 export default function AppBar() {
+    const [isUser, setUser] = useState(false);
+
+    useEffect(() => {
+        try {
+            fetch('/api/login', {method: 'GET'}).then(
+                async (res) => {
+                    const result = await res.json()
+                    setUser(result.isLogged);
+                })
+        } catch (error) {
+            console.error(error);
+        }
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+            if (user) {
+                setUser(true);
+            } else {
+                setUser(false);
+            }
+        });
+
+        return () => unsubscribe();
+    }, []);
+
+
     return (
         <>
             <Disclosure as="nav" className="bg-gray-950 rounded-b-md">
@@ -70,27 +100,32 @@ export default function AppBar() {
                                     <MenuButton className="hover:scale-110 ease-in duration-75 relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                                         <span className="absolute -inset-1.5" />
                                         <span className="sr-only">Open user menu</span>
-                                        <UserIcon className="h-8 w-8 rounded-full" color="white"/>
+                                        <UserIcon className={clsx("h-8 w-8 rounded-full", isUser ? "" : "")} color="white" />
                                     </MenuButton>
                                 </div>
                                 <MenuItems
                                     transition
                                     className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
                                 >
-                                    <MenuItem>
+                                    <MenuItem disabled={!isUser}>
                                         <a href="#" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
-                                            Votre Profil
+                                            Tableau de Bord
                                         </a>
                                     </MenuItem>
                                     <MenuItem>
-                                        <a href="#" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
+                                        <a href="#" className="hidden px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
                                             Paramètres
                                         </a>
                                     </MenuItem>
                                     <MenuItem>
-                                        <a href="#" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
-                                            Se Déconnecter
-                                        </a>
+                                        <Link href="/api/signOut" className={clsx("block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 hover:text-red-500", !isUser ? "hidden" : "")}>
+                                            Se Déconnecter - POST
+                                        </Link>
+                                    </MenuItem>
+                                    <MenuItem disabled={isUser}>
+                                        <Link href='/login' className={clsx("block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 hover:text-green-300", isUser ? "hidden" : "")}>
+                                            Se Connecter
+                                        </Link>
                                     </MenuItem>
                                 </MenuItems>
                             </Menu>

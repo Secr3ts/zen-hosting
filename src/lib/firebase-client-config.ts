@@ -2,6 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getApps, getApp } from "firebase/app";
 import { OAuthProvider, getAuth } from "firebase/auth";
+import { getDatabase } from "firebase/database";
 import { GoogleAuthProvider } from "firebase/auth";
 
 const firebaseConfig = {
@@ -16,6 +17,7 @@ const firebaseConfig = {
 
 const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getDatabase(app);
 const provider = new GoogleAuthProvider();
 
 // Prevent automatic account selection
@@ -23,4 +25,4 @@ provider.setCustomParameters({
   prompt: "select_account",
 });
 
-export { auth, provider };
+export { auth, db, provider };

@@ -7,7 +7,46 @@
   .clip-up {
     clip-path: polygon(0 0,100% 0,100% 80%,0 100%);
   }
+
+  .line-animation {
+    animation: expandWidth 1s ease-in-out forwards;
+    height: 2px;
+  }
+
+  .expand-animation {
+    animation: expandAnimation 1s ease-in forwards;
+  }
+
+  .opacity-animation {
+    animation: opacityAnimation 0.25s ease-in forwards;
+  }
 }
+
+@keyframes opacityAnimation {
+  from {
+    opacity: 0;
+  } to {
+    opacity: 1;
+  }
+}
+
+@keyframes expandWidth {
+  from {
+    width: 0%;
+  }
+  to {
+    width: calc(50% - 20px);
+  }
+}
+
+@keyframes expandAnimation {
+  from {
+    width: 0%;
+  } to {
+    width: 100%;
+  }
+}
+
 
 :root {
   --background: #ffffff;

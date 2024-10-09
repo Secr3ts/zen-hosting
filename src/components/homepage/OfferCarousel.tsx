@@ -41,7 +41,7 @@ const OfferCarousel: React.FC<OfferCarouselProps> = ({className}) => {
             <div className="bg-gray-300 p-8 min-h-screen items-center justify-center flex flex-col gap-8">
                 <p className="text-4xl text-black text-center">Nos Formules</p>
                 <div className="flex flex-col md:flex-row gap-16 justify-center">
-                    <Carousel className="rounded-md hidden md:flex overflow-hidden" showThumbs={false} onChange={(index) => setIndex(index)}>
+                    <Carousel className="rounded-md hidden md:flex h-1/2 overflow-hidden" showThumbs={false} onChange={(index) => setIndex(index)}>
                         {[...Array(3)].map((_, index) => (
                             <div key={index}>
                                 <Image

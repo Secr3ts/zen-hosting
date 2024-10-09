@@ -1,10 +1,10 @@
-import AppBar from "./components/AppBar";
-import Footer from "./components/Footer";
-import InfraCard from "./components/homepage/InfraCard";
-import NewsCard from "./components/homepage/NewsCard";
-import NewsHeader from "./components/homepage/NewsHeader";
-import OfferCarousel from "./components/homepage/OfferCarousel";
-import TopButton from "./components/MenuButton";
+import AppBar from "@/components/AppBar";
+import Footer from "@/components/Footer";
+import InfraCard from "@/components/homepage/InfraCard";
+import NewsCard from "@/components/homepage/NewsCard";
+import NewsHeader from "@/components/homepage/NewsHeader";
+import OfferCarousel from "@/components/homepage/OfferCarousel";
+import TopButton from "@/components/MenuButton";
 import "./globals.css";
 
 export default function Home() {
@@ -14,10 +14,10 @@ export default function Home() {
         <NewsHeader />
         <AppBar />
       </div>
-      <main  className="pt-16"/*className="flex flex-col gap-8 col-start-2 items-center sm:items-start p-2"*/>
+      <main /*className="flex flex-col gap-8 col-start-2 items-center sm:items-start p-2"*/>
         <NewsCard className="snap-start" />
-        <OfferCarousel className="snap-start"/>
-        <InfraCard className="snap-start"/>
+        <OfferCarousel className="snap-start" />
+        <InfraCard className="snap-start" />
         <TopButton />
       </main>
       <footer>

@@ -11,6 +11,7 @@ const NewsCard: React.FC<NewsCardProps> = ({className}) => {
                 <div className="flex flex-col md:flex-row gap-8 p-8">
                     <div className="flex flex-col gap-8 items-center justify-center">
                         <Image
+                            loading="lazy"
                             alt="Placeholder"
                             src="https://placehold.co/400x400.png"
                             width={400}
@@ -25,6 +26,7 @@ const NewsCard: React.FC<NewsCardProps> = ({className}) => {
                             <br />
                             <span className='font-semibold text-gray-900'>à moindre coûts</span>
                         </p>
+                        <div className='line-animation w-1/4 mt-px bg-black'></div>
                     </div>
                 </div>
             </div>

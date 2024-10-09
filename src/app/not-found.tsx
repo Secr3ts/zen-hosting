@@ -1,5 +1,5 @@
 "use client"
-import Footer from "./components/Footer";
+import Footer from "../components/Footer";
 import { Button } from "@headlessui/react";
 import { useRouter } from "next/navigation";
 

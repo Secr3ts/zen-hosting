@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { customInitApp } from "@/lib/firebase-admin-config";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth as authConfig } from "@/lib/firebase-client-config";
-import { FirebaseAuthError } from "firebase-admin/auth";
+import logger from '@/lib/logger'; 
 
 // Init the Firebase SDK every time the server is called
 customInitApp();
@@ -16,7 +16,7 @@ async function handleBearerToken(authorization: string | null) {
     const decodedToken = await auth().verifyIdToken(idToken);
 
     if (decodedToken) {
-      const expiresIn = 5 * 60 * 1000;
+      const expiresIn = 30 * 60 * 1000;
       const sessionCookie = await auth().createSessionCookie(idToken, {
         expiresIn,
       });
@@ -50,7 +50,7 @@ async function handleEmailAndPassword(email: string, password: string) {
       const decodedToken = await auth().verifyIdToken(idToken);
 
       if (decodedToken) {
-        const expiresIn = 5 * 60 * 1000;
+        const expiresIn = 30 * 60 * 1000;
         const sessionCookie = await auth().createSessionCookie(idToken, {
           expiresIn,
         });
@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
       return await handleEmailAndPassword(email, password);
     }
   } catch (error) {
-    console.error(error);
+    console.log(error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }
@@ -104,16 +104,16 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   const session = cookies().get("session")?.value || "";
 
   //Validate if the cookie exist in the request
   if (!session) {
     return NextResponse.json({ isLogged: false }, { status: 401 });
   }
-
+  
   //Use Firebase Admin to validate the session cookie
-  const decodedClaims = await auth().verifySessionCookie(session, true);
+  const decodedClaims = await auth().verifySessionCookie(session, true).catch((reason) => console.log(reason.code));
 
   if (!decodedClaims) {
     return NextResponse.json({ isLogged: false }, { status: 401 });

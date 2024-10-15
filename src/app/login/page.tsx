@@ -1,7 +1,7 @@
 "use client";
 
 import { XMarkIcon } from '@heroicons/react/16/solid';
-import { Button, Field, Fieldset, Input, Label, Legend } from '@headlessui/react'
+import { Button, Description, Dialog, DialogPanel, DialogTitle, Field, Fieldset, Input, Label, Legend } from '@headlessui/react'
 import { getRedirectResult, signInWithRedirect } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -13,9 +13,10 @@ import Link from 'next/link';
 
 interface LoginFormProps {
     className?: string;
+    href?: string;
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({ className }) => {
+const LoginForm: React.FC<LoginFormProps> = ({ className, href }) => {
     const router = useRouter();
 
     // later refactor to useForm ??
@@ -23,6 +24,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ className }) => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [open, setOpen] = useState(false);
+    const [dialogVisible, setDialogVisible] = useState(false);
 
     useEffect(() => {
         getRedirectResult(auth).then(async (userCred) => {
@@ -53,8 +55,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ className }) => {
 
             if (res.ok) {
                 const result = await res.json();
-                // console.log(result);
-                setError(""); // Clear the error state on successful login
+                console.log(result);
+                setError("");
+                // Afficher popup
+                setDialogVisible(true);
                 //router.replace("/protected");
             } else {
                 const errorResponse = await res.json();
@@ -80,6 +84,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ className }) => {
 
     return (
         <section id="login" className={clsx(className)}>
+            {/**Dialog */}
+            {dialogVisible && <LoginDialog href='/' />}
             <div className='flex flex-col gap-8 items-center justify-center min-h-screen bg-gray-300'>
                 <div className="flex flex-row">
                     <Image
@@ -125,7 +131,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ className }) => {
 
                 </div>
                 <Link href='/register' className='select-none cursor-pointer'>
-                    <p className='underline'>
+                    <p className='underline text-black'>
                         Vous ne possédez pas de compte ?
                     </p>
                 </Link>
@@ -135,6 +141,36 @@ const LoginForm: React.FC<LoginFormProps> = ({ className }) => {
                 </footer>
             </div>
         </section>
+    )
+}
+
+interface LoginDialogProps {
+    href?: string
+}
+
+const LoginDialog: React.FC<LoginDialogProps> = ({href}) => {
+    
+    return(
+        <Dialog open={true} onClose={() => {}}>
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                <DialogPanel className="w-full max-w-md p-6 bg-white rounded-lg">
+                    <DialogTitle className="text-lg font-medium text-gray-900">Connexion réussie</DialogTitle>
+                    <Description className="mt-2 text-sm text-gray-500">
+                        Vous êtes maintenant connecté. Cliquez sur le bouton ci-dessous pour continuer.
+                    </Description>
+                    <div className="mt-4">
+                        <Button
+                            onClick={() => {
+                                window.location.href = href || "/protected";
+                            }}
+                            className="w-full px-4 py-2 text-white bg-gray-600 rounded-md hover:bg-gray-800"
+                        >
+                            Continuer
+                        </Button>
+                    </div>
+                </DialogPanel>
+            </div>
+        </Dialog>
     )
 }
 

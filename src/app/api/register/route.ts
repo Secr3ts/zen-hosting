@@ -1,6 +1,8 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "@/lib/firebase-client-config";
-import { NextResponse } from "next/server";
+import { createUserWithEmailAndPassword, User } from "firebase/auth";
+import { auth, db } from "@/lib/firebase-client-config";
+import { NextRequest, NextResponse } from "next/server";
+import { doc, setDoc, Timestamp } from "firebase/firestore";
+import { UserInterface } from "@/lib/interfaces";
 
 // Function to register a new user using Firebase Authentication
 export async function registerUser(email: string, password: string) {
@@ -16,6 +18,8 @@ export async function registerUser(email: string, password: string) {
 
         // You can perform additional actions after successful registration, if needed.
 
+        createUserInFirestore(user);
+
         return { success: true, user };
     } catch (error: any) {
         console.error("Error during registration:", error);
@@ -28,8 +32,25 @@ export async function registerUser(email: string, password: string) {
     }
 }
 
+async function createUserInFirestore(user: User) {
+    try {
+        const userDocRef = doc(db, "users");
+        const userDoc: UserInterface = {
+            email: user.email!,
+            createdAt: Timestamp.now(),
+            updatedAt: Timestamp.now(),
+            isActive: true,
+        };
+
+        setDoc(userDocRef, userDoc, {merge: true});
+        console.log("document creation success for " + user.uid);
+    } catch (error: any) {
+        console.log(error.code);
+    }
+}
+
 // POST request handler
-export async function POST(request: { json: () => PromiseLike<{ email: any; password: any; }> | { email: any; password: any; }; }, response: any) {
+export async function POST(request: NextRequest) {
     try {
         // Extract email and password from the request body
         const { email, password } = await request?.json();

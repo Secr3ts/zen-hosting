@@ -1,6 +1,6 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function middleware(request: { cookies: { get: (arg0: string) => any; }; url: string | URL | undefined; }) {
+export async function middleware(request: NextRequest) {
   const session = request.cookies.get("session");
 
   //Return to /login if don't have a session
@@ -25,5 +25,5 @@ export async function middleware(request: { cookies: { get: (arg0: string) => an
 
 //Add your protected routes
 export const config = {
-  matcher: ["/protected/:path*"],
+  matcher: ["/dashboard/:path*"],
 };

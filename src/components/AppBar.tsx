@@ -2,11 +2,11 @@
 
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon, BellIcon, UserIcon } from "@heroicons/react/16/solid";
-import { auth } from "@/lib/firebase-client-config";
 import Image from 'next/image'
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import clsx from 'clsx';
+import useSWR from "swr";
 
 const navigation = [
     { name: 'Pourquoi nous ?', href: '#news', current: false },
@@ -14,34 +14,24 @@ const navigation = [
     { name: 'Notre infrastructure', href: '#infra', current: false },
 ]
 
-function classNames(...classes: string[]) {
-    return classes.filter(Boolean).join(' ')
-}
-
 export default function AppBar() {
     const [isUser, setUser] = useState(false);
 
-    useEffect(() => {
+    const fetcher = (url: string) => fetch(url, { method: 'GET' }).then(res => res.json());
+    // mauvaise logique ? revoir
+    const { data, isLoading } = useSWR('/api/login', fetcher);
+
+    async function handleSignOut() {
         try {
-            fetch('/api/login', {method: 'GET'}).then(
-                async (res) => {
-                    const result = await res.json()
-                    setUser(result.isLogged);
-                })
-        } catch (error) {
-            console.error(error);
-        }
-        const unsubscribe = auth.onAuthStateChanged((user) => {
-            if (user) {
-                setUser(true);
-            } else {
+            // add popover
+            let response = await fetch('/api/signOut', { method: 'POST' });
+            if (response.ok) {
                 setUser(false);
-            }
-        });
-
-        return () => unsubscribe();
-    }, []);
-
+            };
+        } catch (error: any) {
+            console.error(error)
+        }
+    }
 
     return (
         <>
@@ -76,7 +66,7 @@ export default function AppBar() {
                                                 key={item.name}
                                                 href={item.href}
                                                 aria-current={item.current ? 'page' : undefined}
-                                                className={classNames(
+                                                className={clsx(
                                                     item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-50 hover:text-black',
                                                     'rounded-md px-3 py-2 text-sm font-medium')}
                                             >{item.name}</a>
@@ -107,26 +97,30 @@ export default function AppBar() {
                                     transition
                                     className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
                                 >
-                                    <MenuItem disabled={!isUser}>
-                                        <a href="#" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
+                                    <MenuItem>
+                                        <Link href="/dashboard" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
                                             Tableau de Bord
-                                        </a>
+                                        </Link>
                                     </MenuItem>
                                     <MenuItem>
                                         <a href="#" className="hidden px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
                                             Paramètres
                                         </a>
                                     </MenuItem>
-                                    <MenuItem>
-                                        <Link href="/api/signOut" className={clsx("block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 hover:text-red-500", !isUser ? "hidden" : "")}>
-                                            Se Déconnecter - POST
-                                        </Link>
-                                    </MenuItem>
-                                    <MenuItem disabled={isUser}>
-                                        <Link href='/login' className={clsx("block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 hover:text-green-300", isUser ? "hidden" : "")}>
-                                            Se Connecter
-                                        </Link>
-                                    </MenuItem>
+                                    {
+                                        (!isLoading && data.isLogged) && <MenuItem>
+                                            <a onClick={handleSignOut} className={clsx("block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 hover:text-red-500")}>
+                                                Se Déconnecter
+                                            </a>
+                                        </MenuItem>
+                                    }
+                                    {
+                                        (isLoading || !data.isLogged) && <MenuItem>
+                                            <Link href='/login' className={clsx("block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 hover:text-green-300")}>
+                                                Se Connecter
+                                            </Link>
+                                        </MenuItem>
+                                    }
                                 </MenuItems>
                             </Menu>
                         </div>
@@ -141,7 +135,7 @@ export default function AppBar() {
                                 as="a"
                                 href={item.href}
                                 aria-current={item.current ? 'page' : undefined}
-                                className={classNames(
+                                className={clsx(
                                     item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-white hover:text-black',
                                     'block rounded-md px-3 py-2 text-base font-medium',
                                 )}

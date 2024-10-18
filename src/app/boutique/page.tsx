@@ -18,7 +18,7 @@ interface BoutiqueProps {
 const Boutique: React.FC<BoutiqueProps> = ({className}) => {
     const fetcher = (url: string) => fetch(url, { method: 'GET' }).then(res => res.json());
 
-    const { data, isLoading, error } = useSWR('/api/plans/', fetcher);
+    const { data } = useSWR('/api/plans/', fetcher);
 
     const [isOpen, setOpen ] = useState(false);
 
@@ -32,9 +32,9 @@ const Boutique: React.FC<BoutiqueProps> = ({className}) => {
                 <AppBar className='fixed top-0 shadow-xl z-10 w-screen' />
                 <div className='mt-10 bg-gray-400 h-screen flex sm:flex-row flex-col justify-center items-center gap-32'>
                     {
-                        data && (data as SubscriptionPlanInterface[]).map((plan) => {
+                        data && (data as SubscriptionPlanInterface[]).map((plan, index) => {
                             return (
-                                <div className='flex flex-col text-white shadow-2xl'>
+                                <div key={index} className='flex flex-col text-white shadow-2xl'>
                                     <div className='bg-white p-2 rounded-sm'>
                                         <Image src="https://placehold.co/200x200.png" width={200} height={200} className='p-4' alt={plan.name} />
                                         <p className='text-black text-xl text-center'>

@@ -24,12 +24,12 @@ const AppBar: React.FC<AppBarProps> = ({className, navigation})  => {
 
     async function handleSignOut() {
         try {
-            let response = await fetch('/api/signOut', { method: 'POST' });
+            const response = await fetch('/api/signOut', { method: 'POST' });
             if (response.ok) {
                 mutate('/api/login');
                 setUser(false);
             };
-        } catch (error: any) {
+        } catch (error) {
             console.error(error)
         }
     }

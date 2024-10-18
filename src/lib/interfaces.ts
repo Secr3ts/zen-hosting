@@ -1,13 +1,20 @@
-import { Timestamp } from "firebase/firestore";
+import { Timestamp } from "firebase-admin/firestore";
 
 export interface UserInterface {
     name?: string;
     email: string;
+    customerId: string;
     createdAt: Timestamp;
     updatedAt?: Timestamp;
     subscriptionPlan?: string;
     domains?: string[];
     isActive: boolean;
+}
+
+export interface NavigationInterface {
+    name: string;
+    href: string;
+    current: boolean;
 }
 
 export interface SubscriptionPlanInterface {

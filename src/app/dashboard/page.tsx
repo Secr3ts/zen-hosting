@@ -25,16 +25,18 @@ const Dashboard: React.FC<DashboardProps> = ({ className }) => {
 
     return (
         <div className='bg-gray-50 min-h-screen'>
-            <div className='z-10 shadow-xl'>
-                <AppBar />
+            <div className='z-10 shadow-xl w-screen min-w-screen'>
+                {/** Adapt AppBar for dashboard... */}
+                <AppBar navigation={navigation}/>
             </div>
             <section className={clsx(className)} id="dashboard">
                 <div className='flex flex-row'>
-                    <aside className='flex flex-col bg-gray-100 border-r border-gray-400'>
+                    <aside className='hidden sm:flex flex-col bg-gray-100 border-r border-gray-400'>
                         <div className='flex flex-row border-b border-gray-400 my-2'>
                             {(!isLoading && data.picture) && <Image height={16} width={16} className='' alt="Profile picture" src={data.picture}/>}
                             <p className='my-4 px-4 break-words min-w-64 min-h-4 text-black'>{!isLoading && data.email}</p>
                         </div>
+                        {/** Adapt for mobile view... */}
                         <ul className='min-h-screen flex flex-col gap-2 rounded-r-lg'>
                             {
                                 navigation.map((value, index) => {

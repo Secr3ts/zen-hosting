@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { customInitApp } from "@/lib/firebase-admin-config";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth as authConfig } from "@/lib/firebase-client-config";
-import logger from '@/lib/logger'; 
+import logger from "@/lib/logger";
 
 // Init the Firebase SDK every time the server is called
 customInitApp();
@@ -36,6 +36,9 @@ async function handleBearerToken(authorization: string | null) {
 
 async function handleEmailAndPassword(email: string, password: string) {
   try {
+
+    logger.info("Login attempt from " + email);
+
     const userCredential = await signInWithEmailAndPassword(
       authConfig,
       email,
@@ -61,14 +64,16 @@ async function handleEmailAndPassword(email: string, password: string) {
           httpOnly: true,
           secure: true,
         };
-
+        
         cookies().set(options);
+        
+        logger.info("Login succeded from " + email);
+
         return NextResponse.json({ options }, { status: 200 });
       }
     }
   } catch (error: any) {
-    console.error("Authentication error:", error.code);
-
+    logger.error(`Login Failed from ${email}: ${error.code}`)
     
     let errorMessage = "Authentification echouée.";
 
@@ -96,7 +101,7 @@ export async function POST(request: NextRequest) {
       return await handleEmailAndPassword(email, password);
     }
   } catch (error) {
-    console.log(error);
+    logger.error("Login request failed " + error)
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }
@@ -104,7 +109,12 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET(request: NextRequest) {
+export async function GET() {
+
+  if (process.env.NODE_ENV !== 'production') {
+    logger.info("Login status check");
+  }
+
   const session = cookies().get("session")?.value || "";
 
   //Validate if the cookie exist in the request
@@ -113,7 +123,7 @@ export async function GET(request: NextRequest) {
   }
   
   //Use Firebase Admin to validate the session cookie
-  const decodedClaims = await auth().verifySessionCookie(session, true).catch((reason) => console.log(reason.code));
+  const decodedClaims = await auth().verifySessionCookie(session, true).catch((reason) => {logger.warn('Login status invalid ' + reason.code)});
 
   if (!decodedClaims) {
     return NextResponse.json({ isLogged: false }, { status: 401 });

@@ -19,6 +19,7 @@
     "react-dom": "^18",
     "react-fast-marquee": "^1.6.5",
     "react-responsive-carousel": "^3.2.23",
+    "stripe": "^17.2.0",
     "swr": "^2.2.5",
     "winston": "^3.15.0"
   },

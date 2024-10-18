@@ -1,12 +1,24 @@
 import { createUserWithEmailAndPassword, User } from "firebase/auth";
-import { auth, db } from "@/lib/firebase-client-config";
+import { auth } from "@/lib/firebase-client-config";
+import { customInitApp } from "@/lib/firebase-admin-config";
 import { NextRequest, NextResponse } from "next/server";
-import { doc, setDoc, Timestamp } from "firebase/firestore";
 import { UserInterface } from "@/lib/interfaces";
+import logger from "@/lib/logger";
+import { firestore } from 'firebase-admin';
+import Stripe from 'stripe';
+
+// initialize custom app everytime the server is called
+customInitApp();
+
+// initialize stripe app
+const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_KEY!);
 
 // Function to register a new user using Firebase Authentication
-export async function registerUser(email: string, password: string) {
+export async function registerUser(email: string, password: string, name: string) {
     try {
+
+        logger.info(`Register attempt from ${email}`);
+
         const userCredential = await createUserWithEmailAndPassword(
             auth,
             email,
@@ -14,15 +26,15 @@ export async function registerUser(email: string, password: string) {
         );
 
         const user = userCredential.user;
-        console.log("User registered:", user);
 
         // You can perform additional actions after successful registration, if needed.
-
-        createUserInFirestore(user);
+        // ajuster regles firebase ou utiliser le sdk admin
+        const customerId = await createUserInStripe(user, name);
+        createUserInFirestore(user, customerId, name);
 
         return { success: true, user };
     } catch (error: any) {
-        console.error("Error during registration:", error);
+        logger.error(`Register attempt failed from ${email}`);
 
         if (error.code === "auth/email-already-in-use") {
             return { success: false, error: "Compte déjà existant" }    
@@ -32,20 +44,40 @@ export async function registerUser(email: string, password: string) {
     }
 }
 
-async function createUserInFirestore(user: User) {
+async function createUserInStripe(user: User, name: string) {
     try {
-        const userDocRef = doc(db, "users");
+        const customer = await stripe.customers.create({
+            name: name,
+            email: user.email!,
+            metadata: {
+                uid: user.uid
+            }
+        });
+
+        logger.info(`Stripe customer success for ${user.uid}`);
+        return customer.id
+    } catch (error) {
+        logger.error('Register customer stripe attempt failed for ' + user.uid);
+        throw new Error();
+    }
+}
+
+async function createUserInFirestore(user: User, customerId: string, name: string) {
+    try {
+        const userDocRef = firestore().collection("users").doc(user.uid);
         const userDoc: UserInterface = {
             email: user.email!,
-            createdAt: Timestamp.now(),
-            updatedAt: Timestamp.now(),
+            name: name,
+            createdAt: firestore.Timestamp.now(),
+            updatedAt: firestore.Timestamp.now(),
             isActive: true,
+            customerId: customerId,
         };
 
-        setDoc(userDocRef, userDoc, {merge: true});
-        console.log("document creation success for " + user.uid);
-    } catch (error: any) {
-        console.log(error.code);
+        userDocRef.set(userDoc, { merge: true });
+        logger.info("Document creation success for " + user.uid);
+    } catch (error) {
+        logger.error("error " + error);
     }
 }
 
@@ -53,9 +85,7 @@ async function createUserInFirestore(user: User) {
 export async function POST(request: NextRequest) {
     try {
         // Extract email and password from the request body
-        const { email, password } = await request?.json();
-
-        console.log(email);
+        const { email, password, name } = await request?.json();
         // Check if email and password are provided
         if (!email || !password) {
             return NextResponse.json(
@@ -65,7 +95,7 @@ export async function POST(request: NextRequest) {
         }
 
         // Register the user
-        const registrationResult = await registerUser(email, password);
+        const registrationResult = await registerUser(email, password, name);
 
         if (registrationResult.success) {
             // Registration successful
@@ -82,7 +112,7 @@ export async function POST(request: NextRequest) {
         }
     } catch (error) {
         // Handle unexpected errors
-        console.error("Error during registration:", error);
+        logger.error(`Error during registration ${error}`);
         return NextResponse.json(
             { error: "Erreur interne." },
             { status: 500 }

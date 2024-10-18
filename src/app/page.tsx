@@ -7,12 +7,19 @@ import OfferCarousel from "@/components/homepage/OfferCarousel";
 import TopButton from "@/components/MenuButton";
 import "./globals.css";
 
+
+const navigation = [
+  { name: 'Pourquoi nous ?', href: '#news', current: false },
+  { name: 'Nos Offres', href: '#offers', current: false },
+  { name: 'Notre infrastructure', href: '#infra', current: false },
+]
+
 export default function Home() {
   return (
     <div className="scroll-smooth snap-mandatory snap-y" /*className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]"*/>
       <div className="fixed top-0 w-full z-10 shadow-xl">
         <NewsHeader />
-        <AppBar />
+        <AppBar navigation={navigation}/>
       </div>
       <main /*className="flex flex-col gap-8 col-start-2 items-center sm:items-start p-2"*/>
         <NewsCard className="snap-start" />

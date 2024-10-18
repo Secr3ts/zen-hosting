@@ -22,6 +22,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ className }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordConf, setPasswordConf] = useState('');
+    const [name, setName] = useState('');
     const [error, setError] = useState('');
     const [open, setOpen] = useState(false);
 
@@ -34,20 +35,14 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ className }) => {
 
             if (res.ok) {
                 const result = await res.json();
-                
-                console.log(auth.currentUser)
-                
-                console.log(result);
                 setError(""); // Clear the error state on successful login
                 router.replace('/login/', {scroll: true})
             } else {
                 const errorResponse = await res.json();
-                console.error(errorResponse);
                 setError(errorResponse.error); // Set the error state
                 setOpen(true);
             }
         } catch (error) {
-            console.error("Error during register:", error);
             setError("Une erreur est survenue."); // Set the error state
             setOpen(true);
         }
@@ -59,11 +54,13 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ className }) => {
 
         const data = {
             email: email,
-            password: password
+            password: password,
+            name: name
         }
 
-        if (!data.email || !data.password) { return; }
-        if (password === passwordConf) { registerWithEmail(data); }
+        if (!data.email || !data.password || !data.name) { return; }
+        // ajouter popup pour les mots de passe non identique
+        if (password === passwordConf) { registerWithEmail(data); } else { alert('Veuillez vérifier les mots de passe') }
         return;
     }
 
@@ -90,6 +87,12 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ className }) => {
                                 <span className='font-medium'>Erreur</span> : <span className='font-normal text-gray-700'>{error}</span>
                             </p>
                         </div>
+                        <Field>
+                            <Label>Prénom Nom<span className='text-red-600'>*</span></Label>
+                            <Input type='text' required onChange={(event) => { setName(event.target.value) }} placeholder='Jean Dupont' className={clsx('mt-3 block w-full resize-none rounded-lg border-none bg-gray-200 focus:bg-white py-1.5 px-3 text-sm/6 text-black',
+                                'focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25'
+                            )} />
+                        </Field>
                         <Field>
                             <Label>E-Mail<span className='text-red-600'>*</span></Label>
                             <Input type='email' required onChange={(event) => { setEmail(event.target.value) }} placeholder='email@zen-hosting.systems' className={clsx('mt-3 block w-full resize-none rounded-lg border-none bg-gray-200 focus:bg-white py-1.5 px-3 text-sm/6 text-black',
